@@ -26,15 +26,19 @@ export function UpdateInvoice({ id }: { id: string }) {
 }
 
 export function DeleteInvoice({ id }: { id: string }) {
-  const deleteInvoiceWithId = deleteInvoice.bind(null, id);
-  return (
+  async function deleteInvoiceWithForm(formData: FormData) {
+    'use server';
+    const invoiceId = formData.get('id') as string;
+    await deleteInvoice(invoiceId);
+  }
 
-    <form action={deleteInvoiceWithId}>
+  return (
+    <form action={deleteInvoiceWithForm}>
+      <input type="hidden" name="id" value={id} />
       <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Delete</span>
         <TrashIcon className="w-5" />
       </button>
     </form>
-
   );
 }
